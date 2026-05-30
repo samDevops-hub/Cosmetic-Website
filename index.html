@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Lumière Beauty — premium cosmetics, skincare, and fragrance delivered to your door.">
+  <title>Lumière Beauty | Premium Cosmetics</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <header class="header" id="header">
+    <div class="container header__inner">
+      <a href="/" class="logo" data-nav="home">
+        <span class="logo__mark">L</span>
+        <span class="logo__text">Lumière<em>Beauty</em></span>
+      </a>
+
+      <nav class="nav" id="mainNav" aria-label="Main navigation">
+        <a href="#shop" class="nav__link" data-nav="shop">Shop</a>
+        <a href="#categories" class="nav__link" data-nav="categories">Categories</a>
+        <a href="#about" class="nav__link" data-nav="about">About</a>
+      </nav>
+
+      <div class="header__actions">
+        <button type="button" class="icon-btn" id="searchToggle" aria-label="Search products">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+        </button>
+        <button type="button" class="icon-btn" id="authToggle" aria-label="Account">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        </button>
+        <button type="button" class="icon-btn cart-btn" id="cartToggle" aria-label="Shopping cart">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+          <span class="cart-btn__count" id="cartCount" hidden>0</span>
+        </button>
+        <button type="button" class="menu-toggle" id="menuToggle" aria-label="Open menu" aria-expanded="false">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+
+    <div class="search-bar" id="searchBar" hidden>
+      <div class="container">
+        <input type="search" id="searchInput" placeholder="Search products, brands…" autocomplete="off">
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero" id="home">
+      <div class="hero__bg"></div>
+      <div class="container hero__content">
+        <p class="hero__eyebrow">New season collection</p>
+        <h1 class="hero__title">Radiance begins<br>with <em>you</em></h1>
+        <p class="hero__desc">Curated skincare, makeup, and fragrance from trusted global brands — cruelty-free and dermatologist approved.</p>
+        <div class="hero__cta">
+          <a href="#shop" class="btn btn--primary">Shop now</a>
+          <a href="#categories" class="btn btn--ghost">Explore categories</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="categories" id="categories">
+      <div class="container">
+        <h2 class="section-title">Shop by category</h2>
+        <div class="category-grid" id="categoryGrid"></div>
+      </div>
+    </section>
+
+    <section class="shop" id="shop">
+      <div class="container">
+        <div class="shop__header">
+          <h2 class="section-title">Our products</h2>
+          <div class="shop__filters">
+            <select id="categoryFilter" aria-label="Filter by category">
+              <option value="all">All categories</option>
+            </select>
+            <select id="sortFilter" aria-label="Sort products">
+              <option value="featured">Featured</option>
+              <option value="price-asc">Price: low to high</option>
+              <option value="price-desc">Price: high to low</option>
+              <option value="name">Name A–Z</option>
+            </select>
+          </div>
+        </div>
+        <div class="product-grid" id="productGrid" role="list"></div>
+        <p class="empty-state" id="emptyProducts" hidden>No products match your search.</p>
+      </div>
+    </section>
+
+    <section class="features">
+      <div class="container features__grid">
+        <article class="feature">
+          <span class="feature__icon">✦</span>
+          <h3>Authentic products</h3>
+          <p>Sourced directly from authorized distributors.</p>
+        </article>
+        <article class="feature">
+          <span class="feature__icon">◎</span>
+          <h3>Free delivery</h3>
+          <p>On orders over KES 5,000 within Nairobi.</p>
+        </article>
+        <article class="feature">
+          <span class="feature__icon">♡</span>
+          <h3>Easy returns</h3>
+          <p>14-day hassle-free return policy.</p>
+        </article>
+        <article class="feature">
+          <span class="feature__icon">◈</span>
+          <h3>Secure checkout</h3>
+          <p>M-Pesa, Visa, and Mastercard accepted.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="about" id="about">
+      <div class="container about__inner">
+        <div class="about__text">
+          <h2 class="section-title">About Lumière Beauty</h2>
+          <p>We believe everyone deserves access to premium beauty products without compromise. Founded in Nairobi, our boutique brings international cosmetics to your doorstep with personalized care and honest ingredient lists.</p>
+          <p>Every item in our inventory is tracked in real time — when you see it in stock, it's ready to ship.</p>
+        </div>
+        <div class="about__stats">
+          <div><strong>500+</strong><span>Products</span></div>
+          <div><strong>12k+</strong><span>Happy customers</span></div>
+          <div><strong>48hr</strong><span>Avg. delivery</span></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer__inner">
+      <div class="footer__brand">
+        <span class="logo__text">Lumière<em>Beauty</em></span>
+        <p>Premium cosmetics, delivered with care.</p>
+      </div>
+      <div class="footer__links">
+        <a href="#shop">Shop</a>
+        <a href="#about">About</a>
+        <a href="#" id="footerAuth">Account</a>
+        <a href="/admin">Admin</a>
+      </div>
+      <p class="footer__copy">&copy; <span id="year"></span> Lumière Beauty. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <aside class="drawer" id="cartDrawer" aria-hidden="true" aria-labelledby="cartTitle">
+    <div class="drawer__overlay" id="cartOverlay"></div>
+    <div class="drawer__panel">
+      <header class="drawer__header">
+        <h2 id="cartTitle">Your bag</h2>
+        <button type="button" class="icon-btn" id="cartClose" aria-label="Close cart">&times;</button>
+      </header>
+      <div class="drawer__body" id="cartItems"></div>
+      <footer class="drawer__footer" id="cartFooter">
+        <div class="cart-summary">
+          <span>Subtotal</span>
+          <strong id="cartSubtotal">KES 0</strong>
+        </div>
+        <button type="button" class="btn btn--primary btn--full" id="checkoutBtn" disabled>Checkout</button>
+      </footer>
+    </div>
+  </aside>
+
+  <dialog class="modal" id="authModal" aria-labelledby="authModalTitle">
+    <div class="modal__content">
+      <button type="button" class="modal__close" id="authClose" aria-label="Close">&times;</button>
+      <h2 id="authModalTitle">Welcome back</h2>
+      <div class="tabs" role="tablist">
+        <button type="button" class="tab active" data-tab="login" role="tab" aria-selected="true">Sign in</button>
+        <button type="button" class="tab" data-tab="register" role="tab" aria-selected="false">Create account</button>
+      </div>
+      <form id="loginForm" class="auth-form" data-panel="login">
+        <label>Email<input type="email" name="email" required autocomplete="email"></label>
+        <label>Password<input type="password" name="password" required minlength="6" autocomplete="current-password"></label>
+        <button type="submit" class="btn btn--primary btn--full">Sign in</button>
+      </form>
+      <form id="registerForm" class="auth-form" data-panel="register" hidden>
+        <label>Full name<input type="text" name="name" required autocomplete="name"></label>
+        <label>Email<input type="email" name="email" required autocomplete="email"></label>
+        <label>Phone<input type="tel" name="phone" placeholder="07XX XXX XXX" required></label>
+        <label>Password<input type="password" name="password" required minlength="6" autocomplete="new-password"></label>
+        <button type="submit" class="btn btn--primary btn--full">Create account</button>
+      </form>
+      <p class="auth-user" id="authUserPanel" hidden></p>
+      <button type="button" class="btn btn--ghost btn--full" id="logoutBtn" hidden>Sign out</button>
+    </div>
+  </dialog>
+
+  <dialog class="modal modal--wide" id="checkoutModal" aria-labelledby="checkoutTitle">
+    <div class="modal__content">
+      <button type="button" class="modal__close" id="checkoutClose" aria-label="Close">&times;</button>
+      <h2 id="checkoutTitle">Checkout</h2>
+
+      <div class="checkout-steps">
+        <span class="step active" data-step="1">1. Details</span>
+        <span class="step" data-step="2">2. Payment</span>
+        <span class="step" data-step="3">3. Confirm</span>
+      </div>
+
+      <form id="checkoutForm">
+        <div class="checkout-panel" data-panel="1">
+          <label>Full name<input type="text" name="customerName" required></label>
+          <label>Email<input type="email" name="customerEmail" required></label>
+          <label>Phone<input type="tel" name="customerPhone" required placeholder="07XX XXX XXX"></label>
+          <label>Delivery address<textarea name="customerAddress" rows="2" required placeholder="Street, estate, city"></textarea></label>
+          <button type="button" class="btn btn--primary btn--full" data-next="2">Continue to payment</button>
+        </div>
+
+        <div class="checkout-panel" data-panel="2" hidden>
+          <fieldset class="payment-methods">
+            <legend>Payment method</legend>
+            <label class="payment-option">
+              <input type="radio" name="payment" value="mpesa" checked>
+              <span class="payment-option__card">
+                <strong>M-Pesa</strong>
+                <small>Pay via STK push to your phone</small>
+              </span>
+            </label>
+            <label class="payment-option">
+              <input type="radio" name="payment" value="card">
+              <span class="payment-option__card">
+                <strong>Credit / Debit card</strong>
+                <small>Visa, Mastercard</small>
+              </span>
+            </label>
+          </fieldset>
+
+          <div id="mpesaFields" class="payment-fields">
+            <label>M-Pesa number<input type="tel" name="mpesaPhone" placeholder="07XX XXX XXX"></label>
+            <p class="hint">You will receive an STK push to approve payment.</p>
+          </div>
+
+          <div id="cardFields" class="payment-fields" hidden>
+            <label>Card number<input type="text" name="cardNumber" placeholder="4242 4242 4242 4242" maxlength="19" inputmode="numeric"></label>
+            <div class="form-row">
+              <label>Expiry<input type="text" name="expiry" placeholder="MM/YY" maxlength="5"></label>
+              <label>CVV<input type="text" name="cvv" placeholder="123" maxlength="4" inputmode="numeric"></label>
+            </div>
+          </div>
+
+          <div class="order-total">
+            <span>Order total</span>
+            <strong id="checkoutTotal">KES 0</strong>
+          </div>
+
+          <button type="button" class="btn btn--primary btn--full" id="placeOrderBtn">Place order</button>
+          <button type="button" class="btn btn--ghost btn--full" data-prev="1">Back</button>
+        </div>
+
+        <div class="checkout-panel checkout-success" data-panel="3" hidden>
+          <div class="success-icon">✓</div>
+          <h3>Thank you for your order!</h3>
+          <p>Order <strong id="orderId"></strong> has been placed successfully.</p>
+          <p id="orderSummary"></p>
+          <button type="button" class="btn btn--primary btn--full" id="continueShopping">Continue shopping</button>
+        </div>
+      </form>
+    </div>
+  </dialog>
+
+  <div class="toast-container" id="toastContainer" aria-live="polite"></div>
+
+  <script src="/app.js"></script>
+</body>
+</html>

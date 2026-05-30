@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin | Lumière Beauty</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/admin.css">
+</head>
+<body>
+  <div class="admin-login" id="loginScreen">
+    <form class="login-card" id="loginForm">
+      <div class="login-card__brand">
+        <span class="login-card__mark">L</span>
+        <h1>Lumière Admin</h1>
+        <p>Store management panel</p>
+      </div>
+      <label>Email<input type="email" name="email" required autocomplete="username"></label>
+      <label>Password<input type="password" name="password" required autocomplete="current-password"></label>
+      <button type="submit" class="btn btn--primary btn--full">Sign in</button>
+      <a href="/" class="login-card__back">← Back to store</a>
+    </form>
+  </div>
+
+  <div class="admin-app" id="adminApp" hidden aria-hidden="true">
+    <aside class="sidebar">
+      <div class="sidebar__brand">
+        <span class="sidebar__mark">L</span>
+        <span>Admin</span>
+      </div>
+      <nav class="sidebar__nav">
+        <button type="button" class="sidebar__link active" data-view="dashboard">Dashboard</button>
+        <button type="button" class="sidebar__link" data-view="products">Products</button>
+        <button type="button" class="sidebar__link" data-view="orders">Orders</button>
+        <button type="button" class="sidebar__link" data-view="customers">Customers</button>
+      </nav>
+      <div class="sidebar__footer">
+        <p class="sidebar__user" id="adminName"></p>
+        <button type="button" class="btn btn--ghost btn--sm btn--full" id="logoutBtn">Sign out</button>
+        <a href="/" class="sidebar__store">View store →</a>
+      </div>
+    </aside>
+
+    <div class="admin-main">
+      <header class="admin-header">
+        <h2 id="viewTitle">Dashboard</h2>
+        <button type="button" class="btn btn--primary" id="addProductBtn" hidden>+ Add product</button>
+      </header>
+
+      <div class="admin-content">
+        <section class="view" id="view-dashboard">
+          <div class="stats-grid" id="statsGrid">
+            <p class="loading-msg">Loading dashboard…</p>
+          </div>
+          <div class="panel">
+            <h3>Recent orders</h3>
+            <div class="table-wrap" id="recentOrdersTable"></div>
+          </div>
+        </section>
+
+        <section class="view" id="view-products" hidden>
+          <div class="panel">
+            <div class="table-wrap" id="productsTable"></div>
+          </div>
+        </section>
+
+        <section class="view" id="view-orders" hidden>
+          <div class="panel">
+            <div class="filters-bar">
+              <label>Status
+                <select id="orderStatusFilter">
+                  <option value="">All</option>
+                  <option value="paid">Paid</option>
+                  <option value="pending">Pending</option>
+                  <option value="failed">Failed</option>
+                  <option value="refunded">Refunded</option>
+                </select>
+              </label>
+            </div>
+            <div class="table-wrap" id="ordersTable"></div>
+          </div>
+        </section>
+
+        <section class="view" id="view-customers" hidden>
+          <div class="panel">
+            <div class="table-wrap" id="customersTable"></div>
+          </div>
+        </section>
+      </div>
+    </div>
+  </div>
+
+  <dialog class="modal" id="productModal">
+    <form class="modal__box" id="productForm">
+      <header class="modal__header">
+        <h3 id="productModalTitle">Add product</h3>
+        <button type="button" class="modal__close" id="productModalClose" aria-label="Close">&times;</button>
+      </header>
+      <div class="modal__body">
+        <input type="hidden" name="id" id="productId">
+        <div class="form-grid">
+          <label class="span-2">Name<input type="text" name="name" required></label>
+          <label>Brand<input type="text" name="brand" required></label>
+          <label>Category
+            <select name="category" id="productCategory" required></select>
+          </label>
+          <label>Price (KES)<input type="number" name="price" min="0" required></label>
+          <label>Stock<input type="number" name="stock" min="0" value="0"></label>
+          <label class="span-2">Image URL<input type="url" name="image" required></label>
+          <label class="checkbox-label span-2">
+            <input type="checkbox" name="featured"> Featured product
+          </label>
+        </div>
+      </div>
+      <footer class="modal__footer">
+        <button type="button" class="btn btn--ghost" id="productCancel">Cancel</button>
+        <button type="submit" class="btn btn--primary">Save product</button>
+      </footer>
+    </form>
+  </dialog>
+
+  <dialog class="modal" id="orderModal">
+    <div class="modal__box">
+      <header class="modal__header">
+        <h3>Order details</h3>
+        <button type="button" class="modal__close" id="orderModalClose" aria-label="Close">&times;</button>
+      </header>
+      <div class="modal__body" id="orderDetail"></div>
+      <footer class="modal__footer">
+        <label>Payment status
+          <select id="orderStatusSelect">
+            <option value="pending">Pending</option>
+            <option value="paid">Paid</option>
+            <option value="failed">Failed</option>
+            <option value="refunded">Refunded</option>
+          </select>
+        </label>
+        <button type="button" class="btn btn--primary" id="saveOrderStatus">Update status</button>
+      </footer>
+    </div>
+  </dialog>
+
+  <div class="toast-container" id="toastContainer" aria-live="polite"></div>
+  <script src="/admin.js"></script>
+</body>
+</html>
