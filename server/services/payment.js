@@ -7,11 +7,20 @@ async function processMpesa({ phone, amount, orderId }) {
     orderId,
     accountReference: orderId,
   });
+  if (result.simulated) {
+    return {
+      status: "paid",
+      ref: result.CheckoutRequestID,
+      message: "Payment successful! Your M-Pesa payment was completed.",
+      simulated: true,
+    };
+  }
+
   return {
-    status: result.simulated ? "paid" : "pending",
+    status: "pending",
     ref: result.CheckoutRequestID,
-    message: result.ResponseDescription || "STK push initiated.",
-    simulated: !!result.simulated,
+    message: "STK push sent. Enter your M-Pesa PIN on your phone to complete payment.",
+    simulated: false,
   };
 }
 

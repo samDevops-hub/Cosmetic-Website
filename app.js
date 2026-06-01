@@ -487,6 +487,58 @@ function togglePaymentFields() {
   $("#cardFields").hidden = method !== "card";
 }
 
+function sleep(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+function setCheckoutResult({ state, title, message, orderId, total }) {
+  const panel = document.querySelector(".checkout-result");
+  const icon = $("#checkoutResultIcon");
+  const waiting = $("#checkoutWaiting");
+
+  panel.classList.remove("checkout-result--waiting", "checkout-result--cancelled", "checkout-result--failed");
+  if (state) panel.classList.add(`checkout-result--${state}`);
+
+  $("#checkoutResultTitle").textContent = title;
+  $("#orderId").textContent = orderId || "";
+  $("#orderSummary").textContent = message + (total != null ? ` Total: ${formatPrice(total)}` : "");
+  waiting.hidden = state !== "waiting";
+
+  if (state === "waiting") icon.textContent = "…";
+  else if (state === "cancelled" || state === "failed") icon.textContent = "✕";
+  else icon.textContent = "✓";
+}
+
+async function waitForMpesaPayment(orderId) {
+  const maxWait = 90000;
+  const interval = 2500;
+  const start = Date.now();
+
+  while (Date.now() - start < maxWait) {
+    const order = await api(`/orders/${orderId}`);
+
+    if (order.paymentStatus === "paid") {
+      return {
+        ok: true,
+        message: order.paymentMessage || "Payment successful! Your M-Pesa payment was completed.",
+      };
+    }
+    if (order.paymentStatus === "failed") {
+      const msg = order.paymentMessage || "Payment was not completed.";
+      const cancelled = /cancel/i.test(msg);
+      return { ok: false, cancelled, message: msg };
+    }
+
+    await sleep(interval);
+  }
+
+  return {
+    ok: false,
+    cancelled: false,
+    message: "Payment confirmation timed out. Check your M-Pesa messages or try again.",
+  };
+}
+
 async function placeOrder() {
   const form = $("#checkoutForm");
   const paymentMethod = form.payment.value;
@@ -525,20 +577,69 @@ async function placeOrder() {
       cvv: form.cvv?.value,
     };
 
+    const cartSnapshot = [...cart];
+
     const { order, payment } = await api("/orders", {
       method: "POST",
       body: JSON.stringify(payload),
     });
+
+    goCheckoutStep(3);
+
+    const isMpesaPending = paymentMethod === "mpesa" && !payment.simulated && order.paymentStatus === "pending";
+
+    if (isMpesaPending) {
+      setCheckoutResult({
+        state: "waiting",
+        title: "Complete payment on your phone",
+        message: payment.message,
+        orderId: order.id,
+        total: order.total,
+      });
+
+      const result = await waitForMpesaPayment(order.id);
+      products = await api("/products");
+      renderProducts();
+
+      if (result.ok) {
+        cart = [];
+        saveCart();
+        setCheckoutResult({
+          state: "success",
+          title: "Payment successful!",
+          message: result.message,
+          orderId: order.id,
+          total: order.total,
+        });
+        toast("Payment successful!");
+      } else {
+        cart = cartSnapshot;
+        saveCart();
+        updateCartUI();
+        setCheckoutResult({
+          state: result.cancelled ? "cancelled" : "failed",
+          title: result.cancelled ? "Transaction cancelled" : "Payment not completed",
+          message: result.message,
+          orderId: order.id,
+          total: order.total,
+        });
+        toast(result.message, "error");
+      }
+      return;
+    }
 
     cart = [];
     saveCart();
     products = await api("/products");
     renderProducts();
 
-    $("#orderId").textContent = order.id;
-    $("#orderSummary").textContent = payment.message + ` Total: ${formatPrice(order.total)}`;
-
-    goCheckoutStep(3);
+    setCheckoutResult({
+      state: "success",
+      title: "Thank you for your order!",
+      message: payment.message,
+      orderId: order.id,
+      total: order.total,
+    });
     toast("Order placed successfully!");
   } catch (err) {
     toast(err.message, "error");

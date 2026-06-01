@@ -102,8 +102,8 @@ router.post("/", authOptional, async (req, res) => {
   const placeOrder = db.transaction(() => {
     db.prepare(
       `INSERT INTO orders (id, user_id, total, payment_method, payment_status, payment_ref,
-        customer_name, customer_email, customer_phone, customer_address)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
+        payment_message, customer_name, customer_email, customer_phone, customer_address)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
     ).run(
       orderId,
       userId,
@@ -111,6 +111,7 @@ router.post("/", authOptional, async (req, res) => {
       paymentMethod,
       paymentResult.status,
       paymentResult.ref,
+      paymentResult.message,
       customer.name.trim(),
       customer.email.trim().toLowerCase(),
       customer.phone.trim(),
@@ -176,6 +177,7 @@ router.get("/:id", authOptional, (req, res) => {
     paymentMethod: order.payment_method,
     paymentStatus: order.payment_status,
     paymentRef: order.payment_ref,
+    paymentMessage: order.payment_message,
     customer: {
       name: order.customer_name,
       email: order.customer_email,

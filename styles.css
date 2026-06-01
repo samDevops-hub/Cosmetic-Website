@@ -925,11 +925,11 @@ button, input, select, textarea {
   font-size: 1.1rem;
 }
 
-.checkout-success {
+.checkout-result {
   text-align: center;
 }
 
-.success-icon {
+.checkout-result__icon {
   width: 64px;
   height: 64px;
   margin: 0 auto 1rem;
@@ -940,6 +940,29 @@ button, input, select, textarea {
   border-radius: 50%;
   display: grid;
   place-items: center;
+}
+
+.checkout-result--cancelled .checkout-result__icon,
+.checkout-result--failed .checkout-result__icon {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.checkout-result--waiting .checkout-result__icon {
+  background: #fef3c7;
+  color: #92400e;
+  font-size: 1.5rem;
+}
+
+.checkout-waiting {
+  font-size: 0.9rem;
+  color: var(--ink-muted);
+  margin-top: 0.75rem;
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  50% { opacity: 0.5; }
 }
 
 /* Toast */

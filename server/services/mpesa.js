@@ -6,21 +6,23 @@
 const SANDBOX_BASE = "https://sandbox.safaricom.co.ke";
 const LIVE_BASE = "https://api.safaricom.co.ke";
 
+function env(name) {
+  const v = process.env[name];
+  return typeof v === "string" ? v.trim() : v;
+}
+
 function isConfigured() {
-  return !!(
-    process.env.MPESA_CONSUMER_KEY &&
-    process.env.MPESA_CONSUMER_SECRET &&
-    process.env.MPESA_PASSKEY
-  );
+  if (env("MPESA_SIMULATE") === "true") return false;
+  return !!(env("MPESA_CONSUMER_KEY") && env("MPESA_CONSUMER_SECRET") && env("MPESA_PASSKEY"));
 }
 
 function baseUrl() {
-  return process.env.MPESA_ENV === "production" ? LIVE_BASE : SANDBOX_BASE;
+  return env("MPESA_ENV") === "production" ? LIVE_BASE : SANDBOX_BASE;
 }
 
 async function getAccessToken() {
-  const key = process.env.MPESA_CONSUMER_KEY;
-  const secret = process.env.MPESA_CONSUMER_SECRET;
+  const key = env("MPESA_CONSUMER_KEY");
+  const secret = env("MPESA_CONSUMER_SECRET");
   const auth = Buffer.from(`${key}:${secret}`).toString("base64");
 
   const res = await fetch(`${baseUrl()}/oauth/v1/generate?grant_type=client_credentials`, {
@@ -40,8 +42,8 @@ function formatPhone(phone) {
 }
 
 function stkPassword() {
-  const shortcode = process.env.MPESA_SHORTCODE || "174379";
-  const passkey = process.env.MPESA_PASSKEY;
+  const shortcode = env("MPESA_SHORTCODE") || "174379";
+  const passkey = env("MPESA_PASSKEY");
   const timestamp = new Date()
     .toISOString()
     .replace(/[^0-9]/g, "")
@@ -67,7 +69,13 @@ async function initiateStkPush({ phone, amount, orderId, accountReference }) {
   const token = await getAccessToken();
   const { password, timestamp, shortcode } = stkPassword();
   const callbackUrl =
-    process.env.MPESA_CALLBACK_URL || `http://localhost:${process.env.PORT || 3000}/api/payments/mpesa/callback`;
+    env("MPESA_CALLBACK_URL") || `http://localhost:${env("PORT") || 3000}/api/payments/mpesa/callback`;
+
+  if (callbackUrl.startsWith("http://") && !callbackUrl.includes("localhost")) {
+    console.warn(
+      "M-Pesa: MPESA_CALLBACK_URL should use HTTPS for deployed servers. Safaricom may not deliver callbacks to HTTP URLs."
+    );
+  }
 
   const body = {
     BusinessShortCode: shortcode,

@@ -251,11 +251,12 @@
           <button type="button" class="btn btn--ghost btn--full" data-prev="1">Back</button>
         </div>
 
-        <div class="checkout-panel checkout-success" data-panel="3" hidden>
-          <div class="success-icon">✓</div>
-          <h3>Thank you for your order!</h3>
-          <p>Order <strong id="orderId"></strong> has been placed successfully.</p>
+        <div class="checkout-panel checkout-result" data-panel="3" hidden>
+          <div class="checkout-result__icon" id="checkoutResultIcon">✓</div>
+          <h3 id="checkoutResultTitle">Thank you!</h3>
+          <p>Order <strong id="orderId"></strong></p>
           <p id="orderSummary"></p>
+          <p class="checkout-waiting" id="checkoutWaiting" hidden>Waiting for M-Pesa confirmation…</p>
           <button type="button" class="btn btn--primary btn--full" id="continueShopping">Continue shopping</button>
         </div>
       </form>

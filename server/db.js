@@ -69,4 +69,10 @@ db.exec(`
   );
 `);
 
+try {
+  db.exec(`ALTER TABLE orders ADD COLUMN payment_message TEXT`);
+} catch {
+  /* column already exists */
+}
+
 module.exports = db;

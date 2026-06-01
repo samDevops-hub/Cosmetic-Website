@@ -69,16 +69,50 @@ Admin API routes (require `Authorization: Bearer <admin_token>`):
 
 ## Live M-Pesa (Safaricom Daraja)
 
-Copy `.env.example` to `.env` and set:
+### How it works in this app
 
-- `MPESA_CONSUMER_KEY`
-- `MPESA_CONSUMER_SECRET`
-- `MPESA_PASSKEY`
-- `MPESA_SHORTCODE`
-- `MPESA_CALLBACK_URL` (public HTTPS URL)
-- `MPESA_ENV=sandbox` or `production`
+1. Customer chooses M-Pesa → server sends **STK push** to their phone.
+2. Order is saved as **`pending`** (not paid yet).
+3. Safaricom calls your **`MPESA_CALLBACK_URL`** when the customer enters PIN or cancels.
+4. Callback updates order to **`paid`** or **`failed`**.
 
-Without these, checkout simulates a successful STK push for testing.
+If you see **Failed** in admin, the STK push was sent but Safaricom reported the payment did not complete.
+
+### Setup checklist
+
+Copy `.env.example` to `.env` (on Render: Environment variables). **No spaces after `=`**.
+
+| Variable | Notes |
+|----------|--------|
+| `MPESA_CONSUMER_KEY` | From [Daraja portal](https://developer.safaricom.co.ke) |
+| `MPESA_CONSUMER_SECRET` | Same app |
+| `MPESA_PASSKEY` | Lipa Na M-Pesa sandbox passkey |
+| `MPESA_SHORTCODE` | `174379` for sandbox |
+| `MPESA_CALLBACK_URL` | **HTTPS** public URL, e.g. `https://your-app.onrender.com/api/payments/mpesa/callback` |
+| `MPESA_ENV` | `sandbox` or `production` |
+| `MPESA_SIMULATE` | `true` = always fake success (local dev without phone) |
+
+### Sandbox testing (important)
+
+- Use the **sandbox test phone** from Daraja docs (commonly `254708374149`), not your real number unless registered in sandbox.
+- When the STK prompt appears on the phone, enter the **sandbox PIN** (often `174379` for test paybill).
+- Approve within ~60 seconds or the payment **fails**.
+- `MPESA_CALLBACK_URL` must point to the **same server** that created the order (Render URL if deployed on Render).
+
+### Local development
+
+- Leave all `MPESA_*` empty → payments auto-succeed (simulated).
+- Or set `MPESA_SIMULATE=true` even if keys exist.
+
+### Common “Failed” reasons
+
+| Cause | What to do |
+|-------|------------|
+| Cancelled STK on phone | Try again and approve |
+| Wrong / unregistered phone | Use Daraja sandbox test number |
+| Callback URL wrong or HTTP | Use HTTPS on Render; redeploy after env changes |
+| Keys have leading spaces | No spaces in `.env` values |
+| Testing locally but callback on Render | Order DB and callback DB must match |
 
 ## Live card payments
 
